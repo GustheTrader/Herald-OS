@@ -32,6 +32,12 @@ def test_skill_names_the_factory_roles():
         "bb-sandboxes",
         "127.0.0.1:9840",
         "CLOUDROOM_TOKEN",
+        "GustheTrader/Gnoesisorca",
+        "6970cad0d3bfbcc29d8ad266c3edb23338f3daae",
+        "rsi-lab",
+        "stablyai/orca",
+        "recursive self-improvement",
+        "orca worktree create",
     ):
         assert needle in text, needle
 
@@ -43,11 +49,15 @@ def test_setup_script_pins_the_same_commits():
         PIN,
         "d44dd8b9a6d272a5f601b980c00fade202d00d4c",
         "b5efb8d902fd580262a6b0eeaa130f92d8340f4b",
+        "6970cad0d3bfbcc29d8ad266c3edb23338f3daae",
     }
     assert "https://github.com/GustheTrader/elephant-goldfish-model.git" in script
     assert "https://github.com/GustheTrader/cloudroom-core.git" in script
     assert "https://github.com/GustheTrader/cloudroom-gui.git" in script
+    assert "https://github.com/GustheTrader/Gnoesisorca.git" in script
+    assert "https://github.com/stablyai/orca" in script
     assert '"name": "gnoesis"' in script
     assert '"role": "local-cloud"' in script
     assert '"role": "cloud-space"' in script
+    assert '"role": "rsi-lab"' in script
     assert '"appName": "bb-sandboxes"' in script

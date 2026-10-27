@@ -74,8 +74,8 @@ preview of the site.
 - A feature with real design choices (a new subsystem, API, or data model, or anything they want
   specced first) is the Gnoesis factory: `skill_view name="herald-os-bridge:software-factory"`.
   That path designs with EGM, reviews with fresh subagents, and lets Grok or the Cloudroom
-  local cloud write one approved slice. A one-screen site or a clear small fix stays on the
-  path above.
+  local cloud write one approved slice. Factory changes are tried in the Gnoesisorca RSI lab.
+  A one-screen site or a clear small fix stays on the path above.
 
 ## Which tool for which intent
 

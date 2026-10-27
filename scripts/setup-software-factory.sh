@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # Pin the Gnoesis SI factory's pieces under $HERMES_HOME/herald-os:
-#   EGM (design method), Cloudroom core (local cloud), Cloudroom GUI (internal app).
+#   EGM (design method), Cloudroom core (local cloud), Cloudroom GUI (internal app),
+#   Gnoesisorca (RSI lab).
 # Reports whether Grok and a local core are present. Does not install the core
-# service or sign anyone in. Safe to re-run.
+# service, the Orca app, or sign anyone in. Safe to re-run.
 #
 #   scripts/setup-software-factory.sh
-#   EGM_REF=<sha> CLOUDROOM_CORE_REF=<sha> CLOUDROOM_GUI_REF=<sha> scripts/setup-software-factory.sh
+#   EGM_REF=<sha> CLOUDROOM_CORE_REF=<sha> CLOUDROOM_GUI_REF=<sha> GNOESISORCA_REF=<sha> scripts/setup-software-factory.sh
 set -euo pipefail
 
 HERMES_HOME="${HERMES_HOME:-$HOME/.hermes}"
@@ -21,6 +22,10 @@ CORE_DEST="$ROOT_DIR/cloudroom-core"
 GUI_REPO="https://github.com/GustheTrader/cloudroom-gui.git"
 GUI_REF="${CLOUDROOM_GUI_REF:-b5efb8d902fd580262a6b0eeaa130f92d8340f4b}"
 GUI_DEST="$ROOT_DIR/cloudroom-gui"
+# GustheTrader fork of stablyai/orca, main on 2026-10-21. The RSI lab.
+ORCA_REPO="https://github.com/GustheTrader/Gnoesisorca.git"
+ORCA_REF="${GNOESISORCA_REF:-6970cad0d3bfbcc29d8ad266c3edb23338f3daae}"
+ORCA_DEST="$ROOT_DIR/gnoesisorca"
 
 mkdir -p "$ROOT_DIR"
 
@@ -74,12 +79,19 @@ pin_checkout "$GUI_DEST" "$GUI_REPO" "$GUI_REF"
 test -f "$GUI_DEST/gui/README.md"
 echo "==> Cloudroom GUI (internal app): $GUI_DEST @ $GUI_REF"
 
+pin_checkout "$ORCA_DEST" "$ORCA_REPO" "$ORCA_REF"
+test -f "$ORCA_DEST/README.md"
+test -f "$ORCA_DEST/.github/CONTRIBUTING.md"
+echo "==> Gnoesisorca (RSI lab): $ORCA_DEST @ $ORCA_REF"
+
 python3 - "$ROOT_DIR/software-factory.json" "$DEST" "$REF" "$REPO" \
   "$BRAINSTORM" "$DRAFT" "$REVIEW" "$RESOLVE" "$DRIFT" \
-  "$CORE_DEST" "$CORE_REF" "$CORE_REPO" "$GUI_DEST" "$GUI_REF" "$GUI_REPO" <<'PY'
+  "$CORE_DEST" "$CORE_REF" "$CORE_REPO" "$GUI_DEST" "$GUI_REF" "$GUI_REPO" \
+  "$ORCA_DEST" "$ORCA_REF" "$ORCA_REPO" <<'PY'
 import json, sys
 (path, dest, ref, repo, brainstorm, draft, review, resolve, drift,
- core, core_ref, core_repo, gui, gui_ref, gui_repo) = sys.argv[1:]
+ core, core_ref, core_repo, gui, gui_ref, gui_repo,
+ orca, orca_ref, orca_repo) = sys.argv[1:]
 with open(path, "w", encoding="utf-8") as fh:
     json.dump({
         "name": "gnoesis",
@@ -97,6 +109,13 @@ with open(path, "w", encoding="utf-8") as fh:
             "core": {"path": core, "ref": core_ref, "repo": core_repo, "role": "local-cloud"},
             "gui": {"path": gui, "ref": gui_ref, "repo": gui_repo, "role": "internal-app"},
             "modal": {"appName": "bb-sandboxes", "role": "cloud-space"},
+        },
+        "gnoesisorca": {
+            "path": orca,
+            "ref": orca_ref,
+            "repo": orca_repo,
+            "role": "rsi-lab",
+            "upstream": "https://github.com/stablyai/orca",
         },
     }, fh, indent=2)
     fh.write("\n")
@@ -124,5 +143,6 @@ case "$ready_code" in
 esac
 echo "    Install and connect it from $CORE_DEST/docs/setup.md"
 echo "    Open the internal app from $GUI_DEST (build notes in gui/README.md)"
+echo "    RSI lab: $ORCA_DEST (read .github/CONTRIBUTING.md before pnpm dev)"
 
 echo "==> Done. In Herald OS, ask Hermes to run the Gnoesis factory."

@@ -1,8 +1,9 @@
 # Gnoesis SI factory
 
 Herald OS, Hermes, Google's Elephant-Goldfish Model, and the Grok Build CLI, with Cloudroom
-as the internal app and the local cloud. You approve the spec. A slice then runs on the desk
-in Grok, or in the local cloud where the Cloudroom app shows it.
+as the internal app and the local cloud, and Gnoesisorca as the lab for recursive
+self-improvement. You approve the spec. A product slice then runs on the desk in Grok, in the
+local cloud, or in Cloudroom's Modal space. A change to the factory itself is tried in the lab.
 
 | Role | Who | Job |
 | --- | --- | --- |
@@ -14,13 +15,15 @@ in Grok, or in the local cloud where the Cloudroom app shows it.
 | Internal app | [Cloudroom GUI](https://github.com/GustheTrader/cloudroom-gui) | Watch a thread and move it between the desk and the local cloud |
 | Local cloud | [Cloudroom core](https://github.com/GustheTrader/cloudroom-core) | Self-hosted Rust runtime. Runs Codex, Claude Code, and Pi |
 | Cloud space | Modal app `bb-sandboxes` | Where Cloudroom's cloud machines run. Token stays in `~/.modal.toml` and in the app's Modal sandbox plugin |
+| RSI lab | [Gnoesisorca](https://github.com/GustheTrader/Gnoesisorca) | Fleet desk for recursive self-improvement. Fork of [stablyai/orca](https://github.com/stablyai/orca). Each attempt gets its own worktree |
 
 EGM is the [Elephant-Goldfish Model](https://github.com/google/elephant-goldfish-model)
 (Apache-2.0). The factory pins GustheTrader's tree at
 [elephant-goldfish-model](https://github.com/GustheTrader/elephant-goldfish-model)
 commit `3d0b34821ce88ad328b0c9bf0e06d7eb5f1cd669`. Cloudroom core is pinned at
 `d44dd8b9a6d272a5f601b980c00fade202d00d4c` and Cloudroom GUI at
-`b5efb8d902fd580262a6b0eeaa130f92d8340f4b`. The skill that runs the loop is
+`b5efb8d902fd580262a6b0eeaa130f92d8340f4b`. Gnoesisorca is pinned at
+`6970cad0d3bfbcc29d8ad266c3edb23338f3daae`. The skill that runs the loop is
 `software-factory` in the `herald-os-bridge` plugin.
 
 ## Set it up
@@ -33,7 +36,7 @@ npm install -g @xai-official/grok
 grok login
 ```
 
-The script clones three trees under `~/.hermes/herald-os/` and writes
+The script clones four trees under `~/.hermes/herald-os/` and writes
 `software-factory.json`:
 
 | Tree | Path | Role |
@@ -41,9 +44,12 @@ The script clones three trees under `~/.hermes/herald-os/` and writes
 | EGM | `egm/` | Design method. Skills live under `skills/egm_brainstorm/` and the same pattern for draft, review, resolve, and drift |
 | Cloudroom core | `cloudroom-core/` | Local cloud. Install the service from `docs/setup.md` in that checkout |
 | Cloudroom GUI | `cloudroom-gui/` | Internal app. Build notes are `gui/README.md` |
+| Gnoesisorca | `gnoesisorca/` | RSI lab. Local app notes are `.github/CONTRIBUTING.md` (`pnpm install`, then `pnpm dev`; the tree asks for Node 24) |
 
-Re-running the script checks out the same commits. `EGM_REF`, `CLOUDROOM_CORE_REF`, and
-`CLOUDROOM_GUI_REF` select other commits.
+Re-running the script checks out the same commits. `EGM_REF`, `CLOUDROOM_CORE_REF`,
+`CLOUDROOM_GUI_REF`, and `GNOESISORCA_REF` select other commits. The script records the lab
+and does not install Orca or start a fleet. A fleet spends your own agent subscriptions, so
+Hermes starts one only after you ask, and merges a winner only after you pick it.
 
 The core listens on `127.0.0.1:9840` and keeps `CLOUDROOM_TOKEN` in `/etc/cloudroom/core.env`.
 Connect the app with Settings → Cloudroom account → Connect your own Core. Another machine
@@ -74,8 +80,9 @@ gates and waits for you at the end of each one:
 2. **Draft** writes `docs/designs/<feature>.md`.
 3. **Review** sends fresh Goldfish subagents through comprehension, critique, and a readiness
    check. A review inside the design chat does not count.
-4. **Implement** asks whether the slice runs on the desk (`grok` in the Studio), on the local
-   core, or in Cloudroom's Modal cloud (`bb-sandboxes`, shown in the Cloudroom app).
+4. **Implement** asks where the slice runs: the desk (`grok` in the Studio), the local core,
+   Cloudroom's Modal cloud (`bb-sandboxes`, shown in the Cloudroom app), or the Gnoesisorca
+   RSI lab when the slice changes the factory itself.
 5. **Drift** compares the landed code with the checked-in spec.
 
 A one-screen site or a clear bug fix stays on Studio's `build.start` path. The factory is for
@@ -90,6 +97,7 @@ work that should be designed before it is coded.
 | EGM checkout | `$HERMES_HOME/herald-os/egm` |
 | Local cloud checkout | `$HERMES_HOME/herald-os/cloudroom-core` |
 | Internal app checkout | `$HERMES_HOME/herald-os/cloudroom-gui` |
+| RSI lab checkout | `$HERMES_HOME/herald-os/gnoesisorca` |
 | Factory record | `$HERMES_HOME/herald-os/software-factory.json` |
 | Specs for a project | `<project>/docs/designs/` |
 | Grok auth | `~/.grok/auth.json` |
