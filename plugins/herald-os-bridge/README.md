@@ -25,6 +25,7 @@ skills/
   diagnose-crash/    how to explain a crash from its report
   file-documents/    how to find, read, rename and file documents such as invoices, with undo
   herald-os-tailor/  how to change Herald OS itself: themes, fonts, keybindings, settings
+  software-factory/  EGM design, Goldfish review via Hermes subagents, Grok Build for one slice
 tests/               pytest suite: `npm run test:bridge` from the repository root
 ```
 
