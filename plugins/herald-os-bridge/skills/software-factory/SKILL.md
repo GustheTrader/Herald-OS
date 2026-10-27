@@ -1,20 +1,21 @@
 ---
 name: software-factory
-description: Run a software factory on Herald OS. Hermes designs with the Elephant-Goldfish Model, fresh Goldfish subagents review the spec, and the Grok Build CLI writes the approved slice.
+description: Run the Gnoesis SI factory on Herald OS. Hermes designs with the Elephant-Goldfish Model, fresh Goldfish subagents review the spec, Grok writes an approved slice on the desk, and Cloudroom is the internal app and the local cloud.
 metadata:
   hermes:
-    tags: [herald-os, software-factory, egm, hermes, grok]
+    tags: [herald-os, gnoesis, software-factory, egm, hermes, grok, cloudroom]
     related_skills: [herald-os, grok]
 ---
 
-# Software factory
+# Gnoesis SI factory
 
 Herald OS is the desk. You (Hermes) are the elephant: you hold the project and write the spec.
 Goldfish reviewers are fresh `delegate_task` subagents. The person approves every gate. Grok
-(`grok`, xAI's Grok Build CLI) writes the code for one approved slice and the Studio shows it.
+(`grok`, xAI's Grok Build CLI) writes an approved slice on the desk and the Studio shows it.
+Cloudroom GUI is the internal app. Cloudroom core is the local cloud.
 
-Use this when the person asks for a software factory, EGM, an elephant/goldfish design, or a
-feature that needs a spec before code. A one-screen site or a clear small fix stays on
+Use this when the person asks for Gnoesis, a software factory, EGM, an elephant/goldfish design,
+or a feature that needs a spec before code. A one-screen site or a clear small fix stays on
 `build.start` and the Studio path in the `herald-os` skill.
 
 ## Where EGM lives
@@ -34,6 +35,34 @@ uses hyphen directories is fine: read whichever of the two files exists.
 `$HERMES_HOME/herald-os/software-factory.json` records the checkout after setup.
 
 `EGM artifact directory: docs/designs` inside the project you are designing.
+
+## Cloudroom
+
+Both checkouts are recorded in `$HERMES_HOME/herald-os/software-factory.json` after setup.
+
+| Piece | Role | Checkout | Pin |
+| --- | --- | --- | --- |
+| [cloudroom-gui](https://github.com/GustheTrader/cloudroom-gui) | Internal app | `$HERMES_HOME/herald-os/cloudroom-gui` | `b5efb8d902fd580262a6b0eeaa130f92d8340f4b` |
+| [cloudroom-core](https://github.com/GustheTrader/cloudroom-core) | Local cloud | `$HERMES_HOME/herald-os/cloudroom-core` | `d44dd8b9a6d272a5f601b980c00fade202d00d4c` |
+
+The internal app is where the person watches a thread and moves it between the desk and the
+local cloud. Build notes are `gui/README.md` in the GUI checkout. If the app is already
+installed, open it with `os_ui` `native.launch`. It connects to their own core under
+Settings → Cloudroom account → Connect your own Core.
+
+The local cloud is one Rust service on their Linux machine. It listens on `127.0.0.1:9840`
+unless they changed `CLOUDROOM_LISTEN`. Before you call it, read `docs/setup.md` and
+`docs/api.md` in the core checkout. The harnesses it runs are Codex, Claude Code, and Pi.
+Grok is the desk builder. It is not a core harness.
+
+`CLOUDROOM_TOKEN` is in `/etc/cloudroom/core.env`. The core's `api()` helper in `docs/setup.md`
+reads it into curl's config. Leave the token out of chat, specs, Grok prompts, and git.
+Reach a core on another machine with Tailscale (`tailscale serve`), as that doc describes.
+`tailscale funnel` publishes the API to the internet. Do not use it.
+
+A core that is not answering means the service is not installed yet. Point the person at
+`docs/setup.md` in the core checkout and wait. Do not invent a token or start the service
+with root unless they ask you to follow that doc.
 
 ## You are the Hermes harness
 
@@ -63,22 +92,30 @@ Stop at the end of each gate until the person says to continue.
 3. **Review.** Follow `skills/egm_review/SKILL.md`: comprehension, antagonistic critics, then
    implementation readiness. Apply `skills/egm_resolve/SKILL.md` only for findings the person
    accepts. The spec is ready when a readiness Goldfish says go and the person agrees.
-4. **Implement one slice.** Grok's job, after that agreement.
-   - Work in the project directory. `studio.open` so they can watch. `studio.file` on each file
-     Grok changes.
-   - `grok` must be on `PATH`. Auth is `~/.grok/auth.json` from `grok login` (SuperGrok or X
-     Premium+). Hermes's own xAI login is a different token. If either is missing, say so and
-     give the install line `npm install -g @xai-official/grok`. An `XAI_API_KEY` in the
-     environment is the fallback they can choose. Wait for them.
-   - Prompt Grok with the spec path and one vertical slice from its implementation plan. Pass
-     the slice's files, behavior, and tests. Headless, in that directory:
+4. **Implement one slice.** After that agreement, ask once whether this feature's slices run
+   on the desk or in the local cloud, and keep that answer.
+   - **Desk.** Grok, in the project directory. `studio.open` so they can watch. `studio.file`
+     on each file Grok changes.
+     - `grok` must be on `PATH`. Auth is `~/.grok/auth.json` from `grok login` (SuperGrok or X
+       Premium+). Hermes's own xAI login is a different token. If either is missing, say so and
+       give the install line `npm install -g @xai-official/grok`. An `XAI_API_KEY` in the
+       environment is the fallback they can choose. Wait for them.
+     - Prompt Grok with the spec path and one vertical slice from its implementation plan. Pass
+       the slice's files, behavior, and tests. Headless, in that directory:
 
-     `grok --no-auto-update --always-approve -p '<slice>'`
+       `grok --no-auto-update --always-approve -p '<slice>'`
 
-     Long runs use the terminal tool with `background=true`. Continue the same Grok session
-     with `grok --no-auto-update -c -p '...'`.
-   - Run the project's tests. On failure, one `-c` turn to fix them, then stop and show the
-     diff. The next slice waits for the person.
+       Long runs use the terminal tool with `background=true`. Continue the same Grok session
+       with `grok --no-auto-update -c -p '...'`.
+     - Run the project's tests. On failure, one `-c` turn to fix them, then stop and show the
+       diff. The next slice waits for the person.
+   - **Local cloud.** `GET /v1/ready` on the core must report ready. Create a session with
+     `POST /v1/sessions`: a new `request_id`, the harness they have signed in (`codex`,
+     `claude-code`, or `pi`), and `"workspace"` when this project should have its own cloud
+     folder. Send the approved slice as one prompt to
+     `/v1/sessions/<id>/prompts`. Watch `/stream` or `/events` until that request completes.
+     Tell them the session id and open the internal app. Close the session
+     (`POST /v1/sessions/<id>/close`) after they have seen the result. The next slice waits.
 5. **Drift.** After code has landed, follow `skills/egm_drift_report/SKILL.md` when the repo
    has checked-in specs.
 

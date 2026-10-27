@@ -15,6 +15,7 @@ def test_skill_names_the_factory_roles():
     text = SKILL.read_text(encoding="utf-8")
     assert "name: software-factory" in text
     for needle in (
+        "Gnoesis",
         "delegate_task",
         "grok --no-auto-update --always-approve",
         "skills/egm_brainstorm/SKILL.md",
@@ -22,15 +23,29 @@ def test_skill_names_the_factory_roles():
         "skills/egm_review/SKILL.md",
         "implementation_readiness",
         "GustheTrader/elephant-goldfish-model",
+        "GustheTrader/cloudroom-core",
+        "GustheTrader/cloudroom-gui",
+        "d44dd8b9a6d272a5f601b980c00fade202d00d4c",
+        "b5efb8d902fd580262a6b0eeaa130f92d8340f4b",
         PIN,
         "docs/designs",
+        "127.0.0.1:9840",
+        "CLOUDROOM_TOKEN",
     ):
         assert needle in text, needle
 
 
-def test_setup_script_pins_the_same_commit():
+def test_setup_script_pins_the_same_commits():
     script = SETUP.read_text(encoding="utf-8")
     pins = set(re.findall(r"\b[0-9a-f]{40}\b", script))
-    assert pins == {PIN}
+    assert pins == {
+        PIN,
+        "d44dd8b9a6d272a5f601b980c00fade202d00d4c",
+        "b5efb8d902fd580262a6b0eeaa130f92d8340f4b",
+    }
     assert "https://github.com/GustheTrader/elephant-goldfish-model.git" in script
-    assert "software-factory.json" in script
+    assert "https://github.com/GustheTrader/cloudroom-core.git" in script
+    assert "https://github.com/GustheTrader/cloudroom-gui.git" in script
+    assert '"name": "gnoesis"' in script
+    assert '"role": "local-cloud"' in script
+    assert '"role": "internal-app"' in script

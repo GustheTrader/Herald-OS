@@ -72,9 +72,10 @@ preview of the site.
   file in the code view. Keep progress notes to one sentence; end with what you built and how to
   ask for changes ("say: make the header pink").
 - A feature with real design choices (a new subsystem, API, or data model, or anything they want
-  specced first) is the software factory: `skill_view name="herald-os-bridge:software-factory"`.
-  That path designs with EGM, reviews with fresh subagents, and lets Grok write one approved
-  slice. A one-screen site or a clear small fix stays on the path above.
+  specced first) is the Gnoesis factory: `skill_view name="herald-os-bridge:software-factory"`.
+  That path designs with EGM, reviews with fresh subagents, and lets Grok or the Cloudroom
+  local cloud write one approved slice. A one-screen site or a clear small fix stays on the
+  path above.
 
 ## Which tool for which intent
 
