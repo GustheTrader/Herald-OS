@@ -13,6 +13,7 @@ in Grok, or in the local cloud where the Cloudroom app shows it.
 | Desk builder | `grok` (Grok Build CLI) | Implements one approved slice on this machine |
 | Internal app | [Cloudroom GUI](https://github.com/GustheTrader/cloudroom-gui) | Watch a thread and move it between the desk and the local cloud |
 | Local cloud | [Cloudroom core](https://github.com/GustheTrader/cloudroom-core) | Self-hosted Rust runtime. Runs Codex, Claude Code, and Pi |
+| Cloud space | Modal app `bb-sandboxes` | Where Cloudroom's cloud machines run. Token stays in `~/.modal.toml` and in the app's Modal sandbox plugin |
 
 EGM is the [Elephant-Goldfish Model](https://github.com/google/elephant-goldfish-model)
 (Apache-2.0). The factory pins GustheTrader's tree at
@@ -50,6 +51,10 @@ reaches the core through Tailscale, as `docs/setup.md` describes. The setup scri
 reports whether something is already listening. It does not install the service or print the
 token.
 
+Cloudroom's cloud machines run in the Modal app `bb-sandboxes`. `modal token set` writes the
+account token to `~/.modal.toml`. Enter the same token id and secret in the app under
+Settings → Plugins → Modal sandbox. The setup script records the app name and never the token.
+
 `grok login` uses a SuperGrok or X Premium+ subscription and stores
 `~/.grok/auth.json`. That file is separate from the xAI login Hermes uses for its own tools.
 Pay-as-you-go via `XAI_API_KEY` works when you choose it; the skill asks before using it.
@@ -69,8 +74,8 @@ gates and waits for you at the end of each one:
 2. **Draft** writes `docs/designs/<feature>.md`.
 3. **Review** sends fresh Goldfish subagents through comprehension, critique, and a readiness
    check. A review inside the design chat does not count.
-4. **Implement** asks whether the slice runs on the desk (`grok` in the Studio) or in the
-   local cloud (a core session on Codex, Claude Code, or Pi, shown in the Cloudroom app).
+4. **Implement** asks whether the slice runs on the desk (`grok` in the Studio), on the local
+   core, or in Cloudroom's Modal cloud (`bb-sandboxes`, shown in the Cloudroom app).
 5. **Drift** compares the landed code with the checked-in spec.
 
 A one-screen site or a clear bug fix stays on Studio's `build.start` path. The factory is for
@@ -89,3 +94,4 @@ work that should be designed before it is coded.
 | Specs for a project | `<project>/docs/designs/` |
 | Grok auth | `~/.grok/auth.json` |
 | Core token | `/etc/cloudroom/core.env` (`CLOUDROOM_TOKEN`) |
+| Modal cloud space | Modal app `bb-sandboxes` (profile in `~/.modal.toml`) |

@@ -96,6 +96,7 @@ with open(path, "w", encoding="utf-8") as fh:
         "cloudroom": {
             "core": {"path": core, "ref": core_ref, "repo": core_repo, "role": "local-cloud"},
             "gui": {"path": gui, "ref": gui_ref, "repo": gui_repo, "role": "internal-app"},
+            "modal": {"appName": "bb-sandboxes", "role": "cloud-space"},
         },
     }, fh, indent=2)
     fh.write("\n")

@@ -55,6 +55,16 @@ unless they changed `CLOUDROOM_LISTEN`. Before you call it, read `docs/setup.md`
 `docs/api.md` in the core checkout. The harnesses it runs are Codex, Claude Code, and Pi.
 Grok is the desk builder. It is not a core harness.
 
+Cloudroom's cloud space is Modal. The app name is `bb-sandboxes`, which is the Modal sandbox
+plugin's default. Sandboxes in that app are the cloud machines the internal app shows.
+The Modal profile is already verified for this account. Credentials are `tokenId` and
+`tokenSecret` in Cloudroom's Settings → Plugins → Modal sandbox, the same pair `modal token
+set` writes to `~/.modal.toml`. Leave both out of chat, specs, Grok prompts, and git.
+`modal profile current` and `modal app list` confirm the space. `room-cli modal account
+inspect --json` checks the plugin token without allocating a machine. A new machine is
+`room-cli machine create --provider modal-sandbox --json`, and only after the person asks,
+because it spends Modal credit.
+
 `CLOUDROOM_TOKEN` is in `/etc/cloudroom/core.env`. The core's `api()` helper in `docs/setup.md`
 reads it into curl's config. Leave the token out of chat, specs, Grok prompts, and git.
 Reach a core on another machine with Tailscale (`tailscale serve`), as that doc describes.
@@ -116,6 +126,10 @@ Stop at the end of each gate until the person says to continue.
      `/v1/sessions/<id>/prompts`. Watch `/stream` or `/events` until that request completes.
      Tell them the session id and open the internal app. Close the session
      (`POST /v1/sessions/<id>/close`) after they have seen the result. The next slice waits.
+   - **Modal cloud.** When they want the slice in Cloudroom's cloud, use the Modal app
+     `bb-sandboxes`. Open the internal app, confirm the Modal sandbox plugin has its token,
+     and create the machine only after they agree. The machine is the cloud space for that
+     slice. Do not put the Modal token in the prompt.
 5. **Drift.** After code has landed, follow `skills/egm_drift_report/SKILL.md` when the repo
    has checked-in specs.
 

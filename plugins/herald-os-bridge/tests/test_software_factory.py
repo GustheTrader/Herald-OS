@@ -29,6 +29,7 @@ def test_skill_names_the_factory_roles():
         "b5efb8d902fd580262a6b0eeaa130f92d8340f4b",
         PIN,
         "docs/designs",
+        "bb-sandboxes",
         "127.0.0.1:9840",
         "CLOUDROOM_TOKEN",
     ):
@@ -48,4 +49,5 @@ def test_setup_script_pins_the_same_commits():
     assert "https://github.com/GustheTrader/cloudroom-gui.git" in script
     assert '"name": "gnoesis"' in script
     assert '"role": "local-cloud"' in script
-    assert '"role": "internal-app"' in script
+    assert '"role": "cloud-space"' in script
+    assert '"appName": "bb-sandboxes"' in script
