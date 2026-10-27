@@ -267,7 +267,11 @@ abilities as a regular Hermes plugin, `herald-os-bridge`.
   engine works with any speech provider; an opt-in realtime engine is available. See
   [docs/VOICE.md](docs/VOICE.md).
 - **Studio**: say "build a website for a hair salon" and watch it happen in one window: the
-  project's files, the code as it is written, the commands it runs, and a live preview.
+  project's files, the code as it is written, the commands it runs, and a live preview. A feature
+  that needs a spec first goes through the [Gnoesis factory](docs/SOFTWARE-FACTORY.md): Hermes
+  drafts it with the Elephant-Goldfish Model, fresh reviewers stress-test the spec, and an
+  approved slice runs in Grok on the desk or in the Cloudroom local cloud, watched in the
+  Cloudroom app. A change to the factory itself is tried in the Gnoesisorca RSI lab.
 - **Crash help**: when a program crashes, a notification offers to have Hermes read the crash
   report and explain, in plain words, what went wrong and whether it is worth reporting.
 - **Make it yours**: twelve themes (two light) that also dress Hermes's own command line, a theme

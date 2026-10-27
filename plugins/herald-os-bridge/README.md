@@ -25,6 +25,7 @@ skills/
   diagnose-crash/    how to explain a crash from its report
   file-documents/    how to find, read, rename and file documents such as invoices, with undo
   herald-os-tailor/  how to change Herald OS itself: themes, fonts, keybindings, settings
+  software-factory/  Gnoesis: EGM design, Goldfish review, Grok on the desk, Cloudroom as the local cloud and internal app, Gnoesisorca as the RSI lab
 tests/               pytest suite: `npm run test:bridge` from the repository root
 ```
 

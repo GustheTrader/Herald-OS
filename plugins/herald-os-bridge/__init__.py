@@ -29,6 +29,7 @@ SKILLS: dict[str, str] = {
     "diagnose-crash": "Explain why a program crashed from its crash report or core dump, and whether it is worth reporting.",
     "file-documents": "Find documents such as invoices and receipts among badly named files, read them (OCR for scans), name them clearly and file them where the person keeps them, with a plan they approve and an undo.",
     "herald-os-tailor": "Change Herald OS itself: Herald OS widgets (menu bar, Overview, their own window), themes, fonts, the wallpaper, the menu bar, control-menu entries, branding, keybindings, settings and routines.",
+    "software-factory": "Run the Gnoesis SI factory: design with the Elephant-Goldfish Model, review with fresh Hermes subagents, build a slice with Grok on the desk or in the Cloudroom local cloud, watch it in the Cloudroom app, and try factory changes in the Gnoesisorca RSI lab.",
 }
 
 
