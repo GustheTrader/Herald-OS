@@ -28,6 +28,10 @@ commit `3d0b34821ce88ad328b0c9bf0e06d7eb5f1cd669`. Cloudroom core is pinned at
 
 ## Set it up
 
+On a Zo Computer server — a remote Linux box you drive from the browser — the Zo-specific steps
+and the pieces that run there are in [SOFTWARE-FACTORY-ZO.md](SOFTWARE-FACTORY-ZO.md). The gates
+are the same.
+
 From a Herald OS checkout, after `npm run bootstrap`:
 
 ```bash
