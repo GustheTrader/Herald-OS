@@ -36,6 +36,9 @@ Six of the seven blockers are the same defect seen from different angles: the
 plan was written from the feature outward, never checked inward against the
 files it names.
 
+A second zoom-out pass found two more, one of them a gap the first pass missed:
+the voice speech prompt that every other page appears in is never updated.
+
 ---
 
 ## Blockers
@@ -549,6 +552,76 @@ removing the page removes its registration.
 
 ---
 
+### [19] The voice speech prompt is never updated, so "open the board" does not reach the page
+
+**Reviewers:** `zoom_out` (second pass) #5
+**Affected scope:** CUJ 4 (lines 102–106); the commands table (lines 254–267); plan step 9 (lines 497–501)
+
+**Discrepancy:** CUJ 4 requires the user to reach the board by voice. The
+plan adds `board` and `kanban` to `PAGE_ALIASES` and registers a `board.open`
+command, and touches nothing else. But `STT_VOCABULARY` in
+`apps/desktop/src/lib/voice/stt-tuning.ts` is a fixed prompt that names every
+page the local speech recogniser should expect:
+
+> 'Herald OS voice commands: hey Hermes, open Apps, Missions, Memory, Files,
+> Automations, Connections, Settings, Terminal, System, Overview. …'
+
+Board and kanban are absent, and the file is not in the plan's file list. Every
+other page is in that prompt. CUJ 4 depends on it the same way the other pages
+do.
+
+The same second pass notes that `resolveAppId` already matches a page by `id`
+and by `name`, so a page whose id is `board` and whose name is `Board`
+resolves "board" with no alias at all. The alias that adds a name is `kanban`.
+`page.open` already carries the phrases `open the {name} page`, `switch to
+{name}`, and `go to the {name} page`, and the matcher lets the slot swallow
+"the", so "open the board" hits `page.open` once the page exists. No other page
+registers a command whose only job is `showPage`.
+
+**AI Suggestion:** PROPOSE FIX
+**Justification:** Verified in `lib/voice/stt-tuning.ts` lines 16–18 and
+`commands/navigation.ts` lines 59–80. The alias edit and a new `board.open`
+command do not update the prompt, so the reachability goal is unmet by the
+plan as written.
+
+**Proposed Edit:** add `apps/desktop/src/lib/voice/stt-tuning.ts` to the file
+list and say `STT_VOCABULARY` gains Board. Say whether `board.open` is kept —
+if it is dropped, say that `page.open` and the `board` / `kanban` aliases
+already cover CUJ 4, and drop `board.focus` as well, since `OsHighlighter`
+already scrolls to and pulses `[data-os-target]` from a command's `highlight`.
+
+---
+
+### [20] The column-order helper and its fallback test assume a divergence the runtime does not have
+
+**Reviewers:** `zoom_out` (second pass) #6
+**Affected scope:** plan step 1 `columnLabel` (lines 418–419); plan step 10 tests (lines 503–510)
+
+**Discrepancy:** The plan writes a `columnLabel` helper that falls back to a
+capitalised key for a column the workflow does not list, and a test for it.
+`get_workflow` returns `DEFAULT_WORKFLOW.to_dict()`, and its docstring says
+every board uses the default workflow today; per-board workflows arrive in a
+later phase behind the same shape. `BOARD_COLUMNS` is
+`list(DEFAULT_WORKFLOW.keys())`, and a task with an unknown status is bucketed
+into `todo`. The two lists are the same keys. The helper and its test exist for
+a per-board workflow the same docstring defers.
+
+The same finding restates [9]: "same position in the list" is not the
+runtime's order, and remembering the old index in the renderer would be a
+second ordering on top of the payload.
+
+**AI Suggestion:** PROPOSE FIX
+**Justification:** Verified in `kanban_workflow.py` and the `get_board` column
+sorts. Slice 1 can render `workflow.columns` and look up tasks by `key`; the
+fallback and the divergence test can wait until a board can actually have a
+different workflow.
+
+**Proposed Edit:** fold into [1], [9], and N18: slice 1 renders
+`workflow.columns` and looks up tasks by key, the fallback is deferred, and
+the test covers today's single workflow.
+
+---
+
 ## Nits
 
 Accepted for the same edit pass; no separate decision needed.
@@ -602,5 +675,7 @@ Accepted for the same edit pass; no separate decision needed.
 | [16] CUJ 3 bound | style 5 |
 | [17] Layout width | style 7 |
 | [18] Rollout claim | style 17 |
+| [19] Voice speech prompt | zoom_out (2nd pass) 5 |
+| [20] Column helper assumes divergence | zoom_out (2nd pass) 6 |
 
 Raw reports: `docs/designs/reviews/`.
