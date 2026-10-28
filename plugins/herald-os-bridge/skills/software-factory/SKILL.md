@@ -37,7 +37,8 @@ uses hyphen directories is fine: read whichever of the two files exists.
 
 The supported desks are macOS and Linux with a graphical session. Windows PowerShell alone is
 not the full factory desk; use WSL2 or a Mac/Linux machine and read
-`docs/SOFTWARE-FACTORY.md` (macOS and Linux, Windows and PowerShell).
+`docs/SOFTWARE-FACTORY.md` (macOS and Linux, Windows and PowerShell). On Zo Computer, read
+`docs/SOFTWARE-FACTORY-ZO.md`.
 
 `EGM artifact directory: docs/designs` inside the project you are designing.
 

@@ -5,7 +5,7 @@ Run these from the repository root; the common ones have npm aliases.
 | Script | npm alias | What it does |
 | --- | --- | --- |
 | `bootstrap.sh` | `npm run bootstrap` | One-time setup, safe to re-run after every pull: fetches the upstream snapshot, installs npm packages, links and enables the bridge plugin in your Hermes install, migrates settings from the pre-rename Hermes OS, checks voice prerequisites |
-| `setup-software-factory.sh` | | Pins EGM, Cloudroom core, Cloudroom GUI, and Gnoesisorca (the RSI lab) for the Gnoesis factory and reports whether Grok and a local core are present. Bash on macOS, Linux, WSL2, or Git Bash — not native PowerShell. See [docs/SOFTWARE-FACTORY.md](../docs/SOFTWARE-FACTORY.md) |
+| `setup-software-factory.sh` | | Pins EGM, Cloudroom core, Cloudroom GUI, and Gnoesisorca (the RSI lab) for the Gnoesis factory and reports whether Grok and a local core are present. Bash on macOS, Linux, WSL2, or Git Bash — not native PowerShell. See [docs/SOFTWARE-FACTORY.md](../docs/SOFTWARE-FACTORY.md); on Zo Computer see [docs/SOFTWARE-FACTORY-ZO.md](../docs/SOFTWARE-FACTORY-ZO.md) |
 | `sync-upstream.sh` | `npm run sync-upstream` | Downloads the Hermes Agent commit pinned in `upstream/UPSTREAM.lock` into `upstream/hermes-agent/` |
 | `test-bridge.sh` | `npm run test:bridge` | Runs the bridge plugin's pytest suite |
 | `check-secrets.sh` | | Scans the working tree and the whole git history for committed credentials with gitleaks |

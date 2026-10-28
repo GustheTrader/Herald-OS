@@ -116,6 +116,10 @@ listening and restart host-daemon if it stopped. Step 1 of setup still needs a o
 under Settings → Plugins → Modal sandbox, app name `bb-sandboxes`. Creating a sandbox may still
 require Cloudroom Connect pairing when the server asks for it.
 
+**Zo Computer:** remote Linux is a first-class desk for Hermes, Cloudroom, Modal, and Grok.
+Use [SOFTWARE-FACTORY-ZO.md](SOFTWARE-FACTORY-ZO.md) for clone paths, bootstrap, and Zo MCP
+notes. Herald OS Electron on Zo needs the same graphical session as any other Linux desk.
+
 ## Windows and PowerShell
 
 **Native Windows PowerShell is not a supported desk for the full factory.** Herald OS and the
