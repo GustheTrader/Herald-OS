@@ -25,6 +25,7 @@ from .bridge.host import host_available
 _SKILLS_DIR = Path(__file__).parent / "skills"
 # Skill name -> one-line description for the skills index.
 SKILLS: dict[str, str] = {
+    "hermes-checkpoint": "Submit, track, and recover checkpointed Pi work through the durable factory tool.",
     "herald-os": "How Hermes acts as the operating environment on this computer.",
     "diagnose-crash": "Explain why a program crashed from its crash report or core dump, and whether it is worth reporting.",
     "file-documents": "Find documents such as invoices and receipts among badly named files, read them (OCR for scans), name them clearly and file them where the person keeps them, with a plan they approve and an undo.",
@@ -40,6 +41,13 @@ def _check_available() -> bool:
 
 
 def register(ctx) -> None:
+    from .bridge import durable
+
+    ctx.register_tool(
+        name="factory_durable", toolset="factory_durable", schema=durable.SCHEMA,
+        handler=durable.handle, check_fn=durable.available,
+        description=durable.SCHEMA["description"], emoji="🔁",
+    )
     try:
         from tools.registry import no_cache_check_fn
     except ImportError:  # Older runtimes cache the verdict for 30 seconds, across sessions.

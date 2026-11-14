@@ -9,6 +9,7 @@ platforms:
   - linux
   - windows
 provides_tools:
+  - factory_durable
   - os_ui
   - system_network
   - system_control

@@ -19,6 +19,29 @@ Use this when the person asks for Gnoesis, a software factory, EGM, an elephant/
 RSI, Gnoesisorca, or a feature that needs a spec before code. A one-screen site or a clear small fix stays on
 `build.start` and the Studio path in the `herald-os` skill.
 
+## Durable Hermes lane on Zo
+
+For authorized implementation work, use `factory_durable` to delegate to checkpointed Pi.
+Hermes owns the specification and review; Pi executes the job. Orca hosts `hermes --tui`.
+Use `action: sessions` to find the pre-provisioned project session, then `action: submit`
+with its session id, the exact task prompt, and a stable `request_id` based on the project
+and task identifier. Save the session id, request id, exact prompt and returned submission id
+in the project's task handoff before continuing. Reuse the same request id and prompt after
+a timeout or Hermes restart. Check with `action: status`, session id and `submission_id`.
+Never resubmit with a new key because a response was lost. Never reuse a key for changed work.
+Do not launch plain `pi` for work requiring checkpoint recovery.
+
+The backend runs as Zo process service `gnoesis-pi-durable`, bound to localhost:4780.
+Its launcher is `Projects/Durable Gnoesis Agents Swarm/pi-durable/bin/serve.sh`.
+Stop or restart it through Zo Services. Do not use the old background start/stop scripts
+or restart-test.sh while the service owns it. Credentials stay in pi-durable/.env.
+This checkpoints Pi jobs, not Hermes's own reasoning or chat. Interrupted shell calls may
+have partially run: inspect their effects and request review before consequential retries.
+No promise of exactly-once external effects. Sandbox hardening is still pending.
+
+Native and durability-boundary code must use Rust crates. Python/TS may orchestrate calls
+to them. Run the swarm's `scripts/rust-gate.sh` and each changed crate's clippy/tests.
+
 ## Where EGM lives
 
 The Elephant-Goldfish Model checkout is `$HERMES_HOME/herald-os/egm` (usually

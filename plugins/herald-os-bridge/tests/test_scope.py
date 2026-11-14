@@ -102,7 +102,10 @@ def test_tools_are_offered_and_run_only_for_herald_os(name, plugin, registered, 
 
 def test_every_tool_is_registered_gated(plugin, registered):
     tools = _mod(plugin, "tools")
-    assert list(registered) == [spec.name for spec in tools.TOOL_SPECS]
+    assert list(registered) == ["factory_durable"] + [spec.name for spec in tools.TOOL_SPECS]
+    durable = _mod(plugin, "durable")
+    assert registered["factory_durable"]["toolset"] == "factory_durable"
+    assert registered["factory_durable"]["check_fn"] is durable.available
     for spec in tools.TOOL_SPECS:
         entry = registered[spec.name]
         assert entry["toolset"] == "herald_os" and entry["check_fn"] is plugin._check_available
